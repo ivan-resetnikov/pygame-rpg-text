@@ -1,4 +1,8 @@
+from json import loads as parceJSON
+from math import sin
+
 import pygame as pg
+pg.font.init()
 
 
 
@@ -23,28 +27,47 @@ class _Letter :
 
 			effects : dict,
 
-			font    : pg.Font,
-			isAA    : bool) :
+			font    : pg.font.Font,
 
-		self.letter  = font.render(letter, isAA, effects['color'])
+			index   : int) :
+
+		self.letter  = font.render(letter, effects['font']['isAA'], effects['font']['color'])
 		self.pos     = pos
 
-		self.effects = effects
+		self.effects = {
+			'font' : {
+				'color' : effects['font']['color'],
+				'isAA'  : effects['font']['isAA']
+			},
+			'effects' : {
+				'wave'  : effects['effects']['wave'],
+				'shake' : effects['effects']['shake']
+			},
+			'animSpeed' : effects['animSpeed']
+		}
+
+		self.time = 0 + index
 
 
-	def render (self, frame: pg.Surface) -> None :
-		img = self._animate()
+	def render (self, frame: pg.Surface, pos: list[float]) -> None :
+		img, offset = self._animate()
 
-		frame.blit(img, self.pos)
+		frame.blit(img, [
+			self.pos[0] + pos[0] + offset[0],
+			self.pos[1] + pos[1] + offset[1]])
 
 
 	def _animate (self) -> pg.Surface :
-		img = self.letter.copy()
+		self.time += self.effects['animSpeed']
 
-		# TODO: effects
+		img    = self.letter.copy()
+		offset = [0, 0]
 
-		return img
+		offset[1] += sin(self.time) * self.effects['effects']['wave']
 
+		#print(offset)
+
+		return (img, offset)
 
 
 class Text :
@@ -63,17 +86,101 @@ class Text :
 		to list of objects of class _Letter
 	'''
 
-	def __init__ (self, text: str) :
+	def __init__ (self, text: str, fontPath: str, fontSize: int, letterSpacing: int, isFontAA: bool) :
+		self.font    = pg.font.Font(fontPath, fontSize)
+
+		self.isFontAA = isFontAA
+		self.fontSize = fontSize
+		self.letterSpacing = letterSpacing
+
 		self.letters = self._loadText(text)
 
 
-	def render (self, frame: pg.Surface) -> None :
-		[letters.render(frame) for letter in self.letters]
+	def render (self, frame: pg.Surface, pos: list[float], centered: bool) -> None :
+		offset = [0, 0]
+
+		if centered :
+			offset[0] = -self.textSize[0] * 0.5
+			offset[1] = -self.textSize[1] * 0.5
+
+		[letter.render(frame, [pos[0] + offset[0], pos[1] + offset[1]]) for letter in self.letters]
 
 
 	def _loadText (self, text) -> list :
 		letters = []
 
-		# TODO: syntax parsing
+		effects = {
+			'font' : {
+				'color' : [255, 255, 255],
+				'isAA'  : self.isFontAA
+			},
+			'effects' : {
+				'wave'  : 0,
+				'shake' : 0
+			},
+			'animSpeed' : 0.25,
+		}
+
+		parcingMode = 'parcing text'
+		cursorPos = [0, 0]
+
+		self.textSize = [0, self.fontSize]
+		lastTextSize = 0
+
+
+		for i, letter in enumerate(text) :
+			if letter == '<' :
+				parcingMode = 'parcing modifier'
+				modifierString = ''
+
+				if text[i+1:i+5] == 'next' :
+					self.textSize[1] += self.fontSize * 2
+					cursorPos[1] += self.fontSize * 2
+
+					cursorPos[0] = 0
+
+					lastTextSize = self.textSize[0]
+					self.textSize[0] = 0
+
+			elif text[i-1:i] == '>' :
+				parcingMode = 'parcing text'
+				self._parceModifier(modifierString, effects)
+
+			if parcingMode == 'parcing modifier' :
+				modifierString += letter
+
+			elif parcingMode == 'parcing text' :
+				if letter != ' ' :
+					letters.append(_Letter(
+						letter,
+						[cursorPos[0], cursorPos[1]],
+						effects,
+						self.font,
+						cursorPos[0] / (self.fontSize + self.letterSpacing)
+					))
+
+				cursorPos[0]  += self.fontSize + self.letterSpacing
+				self.textSize[0] += self.fontSize + self.letterSpacing
+
+				if self.textSize[0] > lastTextSize : lastTextSize = self.textSize[0]
 
 		return letters
+
+
+	def _parceModifier (self, modifierText: str, effects: dict) -> dict :
+		if modifierText != '<next>' :
+			modifierText = modifierText.replace('\'', '"')
+			modifierText = modifierText.replace('<', '{')
+			modifierText = modifierText.replace('>', '}')
+
+			modifier = parceJSON(modifierText)
+
+			if 'font' in modifier :
+				if 'color' in modifier['font'] : effects['font']['color'] = modifier['font']['color']
+				if 'isAA'  in modifier['font'] : effects['font']['isAA']  = modifier['font']['isAA']
+
+			if 'effects' in modifier :
+				if 'wave'  in modifier['effects'] : effects['effects']['wave']  = modifier['effects']['wave']
+				if 'shake' in modifier['effects'] : effects['effects']['shake'] = modifier['effects']['shake']
+
+			if 'animSpeed'     in modifier : effects['animSpeed']     = modifier['animSpeed']
