@@ -1,6 +1,11 @@
+# parcing
 from json import loads as parceJSON
-from math import sin
 
+# effects
+from math   import sin
+from random import uniform
+
+# graphics
 import pygame as pg
 pg.font.init()
 
@@ -64,10 +69,12 @@ class _Letter :
 		offset = [0, 0]
 
 		offset[1] += sin(self.time) * self.effects['effects']['wave']
-
-		#print(offset)
+		
+		offset[0] += uniform(-self.effects['effects']['shake'], self.effects['effects']['shake'])
+		offset[1] += uniform(-self.effects['effects']['shake'], self.effects['effects']['shake'])
 
 		return (img, offset)
+
 
 
 class Text :
@@ -118,7 +125,7 @@ class Text :
 				'wave'  : 0,
 				'shake' : 0
 			},
-			'animSpeed' : 0.25,
+			'animSpeed' : 0.1,
 		}
 
 		parcingMode = 'parcing text'
