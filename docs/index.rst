@@ -27,8 +27,8 @@ Modifiers syntax
 ~~~~~~~~~~~~~~~~
 
 **How to use :**
-Basically, it's json formated
-but first layer is surrounded with ``<>`` isteard of ``{}``.
+Basically, it's json formated.
+But first layer is surrounded with ``<>`` isteard of ``{}``.
 
 Example:
 
@@ -36,15 +36,15 @@ Example:
 
 Heres is the list of all modifiers:
 
-font
-* color (list) : list of three RPG values
-* isAA  (bool) : enable/disable anti-aliasing
+font<br>
+* color (list) : list of three RPG values<br>
+* isAA  (bool) : enable/disable anti-aliasing<br>
+<br>
+effects<br>
+* wave (int)  : wave effect<br>
+* shake (int) : shaking effect<br>
 
-effects
-* wave (int)  : wave effect
-* shake (int) : shaking effect
-
-animSpeed (float) : chage animation speed
+animSpeed (float) : chage animation speed<br>
 
 Also the special one
 ~~~~~~~~~~~~~~~~~~~~
