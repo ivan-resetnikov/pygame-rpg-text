@@ -38,11 +38,11 @@ Heres is the list of all modifiers:
 
 *
 |
-• font
++ font
 |  |-- color (list) : list of three RPG values
 |  `-- isAA  (bool) : enable/disable anti-aliasing
 |
-• effects
++ effects
 |  |-- wave (int)  : wave effect
 |  `-- shake (int) : shaking effect
 |
