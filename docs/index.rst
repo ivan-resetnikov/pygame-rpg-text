@@ -37,15 +37,15 @@ Example:
 Heres is the list of all modifiers:
 
 o
-|
+!
 + font
-|  |- color (list) : list of three RPG values
-|  `- isAA  (bool) : enable/disable anti-aliasing
-|
+!  !- color (list) : list of three RPG values
+!  `- isAA  (bool) : enable/disable anti-aliasing
+!
 + effects
-|  |- wave (int)  : wave effect
-|  `- shake (int) : shaking effect
-|
+!  !- wave (int)  : wave effect
+!  `- shake (int) : shaking effect
+!
 `- animSpeed (float) : chage animation speed
 
 Also the special one
