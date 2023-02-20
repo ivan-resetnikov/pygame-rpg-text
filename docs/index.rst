@@ -36,15 +36,15 @@ Example:
 
 Heres is the list of all modifiers:
 
-*
+o
 |
 + font
-|  |-- color (list) : list of three RPG values
-|  `-- isAA  (bool) : enable/disable anti-aliasing
+|  |- color (list) : list of three RPG values
+|  `- isAA  (bool) : enable/disable anti-aliasing
 |
 + effects
-|  |-- wave (int)  : wave effect
-|  `-- shake (int) : shaking effect
+|  |- wave (int)  : wave effect
+|  `- shake (int) : shaking effect
 |
 `- animSpeed (float) : chage animation speed
 
@@ -53,6 +53,6 @@ Also the special one
 
 Use ``<next>`` to go to next line, example:
 
-r'Line 1<next> Line2'
+``r'Line1 <next> Line2'``
 
 **IMPORTANT** after the "<next>" modifier **must** be space or else text might broke (will be fixed later)
