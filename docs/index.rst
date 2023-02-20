@@ -54,6 +54,5 @@ Also the special one
 Use ``<next>`` to go to next line, example:
 
 r'Line 1<next> Line2'
-              ^
-              |
-**IMPORTANT** `- here **must** be space or else text might broke (will be fixed later)
+
+**IMPORTANT** after the "<next>" modifier **must** be space or else text might broke (will be fixed later)
