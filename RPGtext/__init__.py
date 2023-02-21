@@ -93,7 +93,7 @@ class Text :
 		to list of objects of class _Letter
 	'''
 
-	def __init__ (self, text: str, fontPath: str, fontSize: int, letterSpacing: int, isFontAA: bool) :
+	def __init__ (self, text: str, fontPath: str, fontSize: int, letterSpacing: int, isFontAA: bool, typeSpeed: float = 0) :
 		self.font    = pg.font.Font(fontPath, fontSize)
 
 		self.isFontAA = isFontAA
@@ -101,6 +101,13 @@ class Text :
 		self.letterSpacing = letterSpacing
 
 		self.letters = self._loadText(text)
+
+		self.typeSpeed = typeSpeed
+		
+		if typeSpeed == 0 :
+			self.cursorPos = len(self.letters)
+		else :
+			self.cursorPos = 0
 
 
 	def render (self, frame: pg.Surface, pos: list[float], centered: bool) -> None :
@@ -110,7 +117,9 @@ class Text :
 			offset[0] = -self.textSize[0] * 0.5
 			offset[1] = -self.textSize[1] * 0.5
 
-		[letter.render(frame, [pos[0] + offset[0], pos[1] + offset[1]]) for letter in self.letters]
+		[letter.render(frame, [pos[0] + offset[0], pos[1] + offset[1]]) for letter in self.letters[:round(self.cursorPos):]]
+
+		if self.cursorPos < len(self.letters) : self.cursorPos += self.typeSpeed
 
 
 	def _loadText (self, text) -> list :
