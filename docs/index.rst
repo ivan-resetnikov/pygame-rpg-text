@@ -1,56 +1,57 @@
-RPG Text generator for Pygame
-=============================
+# Pygame RPG Text
 
-Example
-~~~~~~~
+## Introduction
 
-Use ``pip install RPG-text-engine`` to install the module
-Then import it using ``import RPGtext``.
+The Text Animation Library is a Python library that allows the user to animate text, giving it a more dynamic appearance on screen. It is based on the Pygame library, which provides the graphics engine used to render the text. This library has two main classes: the Text class, which represents the text and provides methods to render it on screen, and the _Letter class, which represents each letter in the text and handles its animation.
+Installation
 
-Use this line of code to create red text
-``red_text = RPGtext.Text(r'<"font": {"color": [255, 0 0]}>This text is red!', 'fontFileName.ttf', <font_size>, <letters_spacing>, True)``
+This library requires the Pygame library to be installed. To install the Text Animation Library, run the following command:
 
-Then (already in your game loop), use this to render it:
-``red_text.render(window, (x, y))``
+::
 
-More detailed syntax docs
-~~~~~~~~~~~~~~~~~~~~~~~~~
-``red_text = RPGtext.Text(<text>, <fontPath>, <fontSize>, <letterSpacing>, <isFontAA>)``
+shell
 
-text          : string  - text to render (see syntax of modyfiers below)
-fontPath      : string  - path to .ttf file
-fontSize      : integer - size of font
-letterSpacing : integer - space between letters
-isFontAA      : boolean - Enable/disable anti-aliasing
+$ pip install text-animation-library
 
-Modifiers syntax
-~~~~~~~~~~~~~~~~
+Usage
 
-**How to use :**
-Basically, it's json formated.
-But first layer is surrounded with ``<>`` isteard of ``{}``.
+To use the Text Animation Library, you first need to import it:
 
-Example:
+.. code-block:: python
 
-<"font": {"color": [255, 255, 255]}> - will make text white
+python
 
-Heres is the list of all modifiers:
+from text_animation_library import Text
 
-font<br>
-* color (list) : list of three RPG values<br>
-* isAA  (bool) : enable/disable anti-aliasing<br>
-<br>
-effects<br>
-* wave (int)  : wave effect<br>
-* shake (int) : shaking effect<br>
+To create a new text object, you need to provide the text string, the path to the font file, the font size, the letter spacing, and a boolean flag indicating whether the font should be anti-aliased:
 
-animSpeed (float) : chage animation speed<br>
+.. code-block:: python
 
-Also the special one
-~~~~~~~~~~~~~~~~~~~~
+vbnet
 
-Use ``<next>`` to go to next line, example:
+text = Text("Hello World!", "fonts/arial.ttf", 48, 2, True)
 
-``r'Line1 <next> Line2'``
+To render the text on screen, you need to call the render method on the text object, providing a Pygame Surface object to render onto and the position of the text:
 
-**IMPORTANT** after the "<next>" modifier **must** be space or else text might broke (will be fixed later)
+.. code-block:: python
+
+scss
+
+screen = pygame.display.set_mode((800, 600))
+text.render(screen, [100, 100])
+
+You can also animate the text by setting the typeSpeed parameter to a value greater than zero:
+
+.. code-block:: python
+
+vbnet
+
+text = Text("Hello World!", "fonts/arial.ttf", 48, 2, True, typeSpeed=0.2)
+
+The typeSpeed parameter specifies how fast the text should be typed out. A value of 1.0 means that the text should be typed out instantly, while a value of 0.1 means that each letter should be typed out in 0.1 seconds.
+License
+
+The Text Animation Library is released under the MIT License. See LICENSE.txt for more details.
+Documentation
+
+Full documentation can be found in the docstrings of the source code.
